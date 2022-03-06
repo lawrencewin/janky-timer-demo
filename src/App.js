@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react"
 
 function App() {
+  let [seconds, setSeconds] = useState(0)
+  const handleInputChange = (event) => {
+    const inputedSeconds = event.target.value
+    const parsed = parseInt(inputedSeconds)
+    if (!isNaN(parsed)) {
+      setSeconds(parsed)
+    }
+  }
+
+  const handleClick = () => {
+    const id = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if (prevSeconds === 0) {
+          clearInterval(id)
+          alert("Time's up, you're late.")
+        } else {
+          return prevSeconds - 1
+        }
+      })
+    }, 1000)
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>{seconds} seconds</h1>
+      <div>
+        <input type="number" onChange={handleInputChange} />
+        <button onClick={handleClick}>Start Timer</button>
+      </div>
     </div>
   );
 }
